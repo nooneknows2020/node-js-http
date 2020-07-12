@@ -1,5 +1,6 @@
 'use strict';
 const http = require('http');
+const pug = require('pug');
 const server = http.createServer((req, res) => {
   const now = new Date();
   console.info(`[${now}] Requested by ${req.connection.remoteAddress}]`);
@@ -8,9 +9,9 @@ const server = http.createServer((req, res) => {
   });
   switch(req.method){
     case 'GET':
-      const fs = require('fs');
-      const rs = fs.createReadStream('./form.html');
-      rs.pipe(res); //データを受け渡した後、通信が終了する
+      //pugモジュールを利用して、form.puを描画し、レスポンスに描き出す
+      res.write(pug.renderFile('./form.pug'));
+      res.end();
       break;
     case 'POST':
       let body = '';
@@ -20,7 +21,7 @@ const server = http.createServer((req, res) => {
         const decoded = decodeURIComponent(body);
         console.info(`[${now}] 投稿: ${decoded}`);
         res.write(`<h1>${decoded}が投稿されました</h1>`);
-        res.end();  //POSTメソッドを使った場合のみ、res.end()を行う。
+        res.end();
       });
       break;
     default:
