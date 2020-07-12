@@ -9,13 +9,20 @@ const server = http.createServer((req, res) => {
   });
   switch(req.method){
     case 'GET':
-      //pugモジュールを利用して、form.pugを描画し、レスポンスに描き出す
-      //テンプレートが変数を読み込むように変更
-      res.write(pug.renderFile('./form.pug',{
-        path: req.url,
-        firstItem: '焼き肉',
-        secondItem: 'しゃぶしゃぶ'
-      }));
+      // req.urlの値でアンケートの内容を振り分ける
+      if(req.url === '/enquetes/yaki-shabu'){
+        res.write(pug.renderFile('./form.pug',{
+          path: req.url,
+          firstItem: '焼き肉',
+          secondItem: 'しゃぶしゃぶ'
+        }));
+      }else if(req.url === '/enquetes/rice-bread'){
+        res.write(pug.renderFile('./form.pug',{
+          path: req.url,
+          firstItem: 'ごはん',
+          secondItem: 'パン'
+        }));
+      }
       res.end();
       break;
     case 'POST':
