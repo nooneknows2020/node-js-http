@@ -9,8 +9,13 @@ const server = http.createServer((req, res) => {
   });
   switch(req.method){
     case 'GET':
-      //pugモジュールを利用して、form.puを描画し、レスポンスに描き出す
-      res.write(pug.renderFile('./form.pug'));
+      //pugモジュールを利用して、form.pugを描画し、レスポンスに描き出す
+      //テンプレートが変数を読み込むように変更
+      res.write(pug.renderFile('./form.pug',{
+        path: req.url,
+        firstItem: '焼き肉',
+        secondItem: 'しゃぶしゃぶ'
+      }));
       res.end();
       break;
     case 'POST':
