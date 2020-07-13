@@ -9,20 +9,22 @@ const server = http.createServer((req, res) => {
   });
   switch(req.method){
     case 'GET':
+      // 別解
+      let firstItem = 'あんぱん';
+      let secondItem = 'クリームパン';
       // req.urlの値でアンケートの内容を振り分ける
       if(req.url === '/enquetes/yaki-shabu'){
-        res.write(pug.renderFile('./form.pug',{
-          path: req.url,
-          firstItem: '焼き肉',
-          secondItem: 'しゃぶしゃぶ'
-        }));
+        firstItem = '焼き肉';
+        secondItem = 'しゃぶしゃぶ';
       }else if(req.url === '/enquetes/rice-bread'){
-        res.write(pug.renderFile('./form.pug',{
-          path: req.url,
-          firstItem: 'ごはん',
-          secondItem: 'パン'
-        }));
+        firstItem = 'ごはん';
+        secondItem = 'パン';
       }
+      res.write(pug.renderFile('./form.pug',{
+        path: req.url,
+        firstItem: firstItem,
+        secondItem: secondItem
+      }));
       res.end();
       break;
     case 'POST':
