@@ -1,9 +1,29 @@
 'use strict';
 const http = require('http');
 const pug = require('pug');
-const server = http.createServer((req, res) => {
+const auth = require('http-auth');
+
+// Basic認証の設定。realm:Basic認証時に保護する領域の名前
+const basic = auth.basic(
+  { realm: 'Enquetes Area.'},
+  (username, password, callback) => {
+      callback(username === 'guest' && password === 'xaXZJQmE');
+  }
+);
+
+const server = http.createServer(basic, (req, res) => {
   const now = new Date();
   console.info(`[${now}] Requested by ${req.connection.remoteAddress}]`);
+
+  // ログアウト処理(パスが/logoutであるときにステータスコード401を返す)
+  if(req.url === '/logout'){
+    res.writeHead(401, {
+      'Content-type': 'text/plain; charset=utf-8'
+    });
+    res.end('ログアウトしました');
+    return;
+  }
+
   res.writeHead(200, {
     'Content-type': 'text/html; charset=utf-8'
   });
